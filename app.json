@@ -6,7 +6,9 @@
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "dark",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "plugins": [],
     "android": {
       "package": "com.verum.contradiction",
@@ -19,6 +21,12 @@
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#0A1524"
       }
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "98593585-ea3b-4505-ac7f-829fb1fc13e1"
+      }
+    },
+    "owner": "liamhigh"
   }
 }
