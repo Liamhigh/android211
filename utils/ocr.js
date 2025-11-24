@@ -13,14 +13,11 @@ export async function runOCR(uri) {
 
     // Step 2: Create Tesseract Worker configured for offline-first operation
     // Language data will be cached locally after first download, enabling offline use
-    // For fully offline operation: pre-download eng.traineddata and place in cache
     const worker = await createWorker({
       logger: m => console.log("TESSERACT:", m),
       // Store language data in app's cache directory for offline reuse
       // Ensure proper path formatting with trailing slash
       cachePath: `${FileSystem.cacheDirectory}tesseract/`,
-      // Use cached data when available, avoiding CDN calls
-      cacheMethod: 'write',
     });
     
     // Load language - will use cached version if available (offline-first)

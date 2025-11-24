@@ -38,14 +38,15 @@ This Android app is designed to work **100% offline** for maximum security and r
 - **Configuration**:
   ```javascript
   const worker = await createWorker({
+    logger: m => console.log("TESSERACT:", m),
     cachePath: `${FileSystem.cacheDirectory}tesseract/`,
-    cacheMethod: 'write',
   });
   ```
 - **Offline Operation**:
   - First run: Downloads language data (requires internet)
   - Subsequent runs: Uses cached data (fully offline)
   - Cache persists across app sessions
+  - cachePath option enables automatic caching in React Native/Expo
   - For pre-seeded offline: Manually place eng.traineddata in cache directory
 
 ### ✅ Image Processing (expo-image-manipulator)
@@ -154,7 +155,7 @@ All dependencies verified for offline capability:
 | expo-image-picker | ~16.0.0 | ✅ | Native picker |
 | expo-image-manipulator | ~12.0.0 | ✅ | Native processing |
 | expo-sharing | ~12.0.0 | ✅ | Native sharing |
-| expo-asset | ~10.0.0 | ✅ | Asset bundling |
+| react-native-view-shot | 3.7.0 | ✅ | Screenshot capture |
 
 ## Testing Offline Mode
 
