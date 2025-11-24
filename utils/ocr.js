@@ -1,7 +1,6 @@
 import { createWorker } from "tesseract.js";
 import * as ImageManipulator from "expo-image-manipulator";
 import * as FileSystem from "expo-file-system";
-import { Asset } from "expo-asset";
 
 export async function runOCR(uri) {
   try {
@@ -12,15 +11,18 @@ export async function runOCR(uri) {
       { compress: 1, format: ImageManipulator.SaveFormat.PNG }
     );
 
-    // Step 2: Create Tesseract Worker with LOCAL language data for offline use
+    // Step 2: Create Tesseract Worker with LOCAL configuration for offline use
+    // Note: Language data should be bundled in assets/tesseract/ directory
+    // Tesseract.js will cache the language file locally after first use
     const worker = await createWorker({
       logger: m => console.log("TESSERACT:", m),
-      // Use local assets instead of CDN - ensures 100% offline operation
-      langPath: FileSystem.documentDirectory,
+      // Cache language data locally for offline operation
       cachePath: FileSystem.cacheDirectory,
+      // Fallback to bundled assets if available
+      langPath: `${FileSystem.bundleDirectory}assets/tesseract`,
     });
     
-    // Load language from bundled assets (offline-first approach)
+    // Load language from local cache or bundled assets (offline-first approach)
     await worker.loadLanguage("eng");
     await worker.initialize("eng");
 
