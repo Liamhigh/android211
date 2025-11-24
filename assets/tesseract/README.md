@@ -18,8 +18,8 @@ If you need the app to work offline from the very first use:
 
 ## Why This Approach?
 
-Expo/React Native apps cannot easily bundle large binary assets (like 5MB .traineddata files) 
-in a way that Tesseract.js can access at runtime. The caching approach ensures:
+With standard Expo/React Native tooling, bundling large binary assets (like 5MB .traineddata files) 
+in a way that Tesseract.js can directly access at runtime is complex. The caching approach ensures:
 
 - ✅ Offline operation after first use
 - ✅ Smaller APK size

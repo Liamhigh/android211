@@ -38,7 +38,7 @@ This Android app is designed to work **100% offline** for maximum security and r
 - **Configuration**:
   ```javascript
   const worker = await createWorker({
-    cachePath: FileSystem.cacheDirectory + 'tesseract',
+    cachePath: `${FileSystem.cacheDirectory}tesseract/`,
     cacheMethod: 'write',
   });
   ```
