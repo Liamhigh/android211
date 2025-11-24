@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: linux-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -28,10 +28,9 @@ jobs:
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: |
-          eas whoami || eas login --token "$EXPO_TOKEN""
+          eas whoami || eas login --token "$EXPO_TOKEN"
 
       - name: Build Android APK
-
         run: |
           eas build --platform android --profile preview --non-interactive
 
