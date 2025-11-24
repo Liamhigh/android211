@@ -38,13 +38,13 @@ This Android app is designed to work **100% offline** for maximum security and r
 - **Configuration**:
   ```javascript
   const worker = await createWorker({
-    langPath: FileSystem.documentDirectory,
     cachePath: FileSystem.cacheDirectory,
+    langPath: `${FileSystem.bundleDirectory}assets/tesseract`,
   });
   ```
 - **Requirements**:
   - Language training data must be bundled in `assets/tesseract/`
-  - Uses local filesystem paths instead of CDN
+  - Uses bundled assets with local caching instead of CDN
   - All processing happens on-device
 
 ### ✅ Image Processing (expo-image-manipulator)
