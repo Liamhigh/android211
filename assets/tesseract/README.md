@@ -1,25 +1,41 @@
-# Tesseract Language Files
+# Tesseract Language Files (Optional Pre-seeding)
 
-This directory contains the Tesseract OCR language training data for offline use.
+This directory can be used to pre-seed the Tesseract OCR language cache for offline operation.
 
-## Required Files
-- `eng.traineddata` - English language training data (uncompressed)
+## How OCR Works in This App
 
-## Download Instructions
-If the language file is missing, download it from:
-https://github.com/tesseract-ocr/tessdata_fast/raw/main/eng.traineddata
+### Default Behavior (Offline-First)
+1. **First Run**: App downloads `eng.traineddata` from CDN (requires internet)
+2. **Cached**: Language file is saved to device cache directory
+3. **Subsequent Runs**: Uses cached file (fully offline)
 
-Place the uncompressed `eng.traineddata` file in this directory before building the Android APK.
+### Optional: Pre-seed for Fully Offline First Run
+If you need the app to work offline from the very first use:
 
-**Important**: Use the uncompressed `.traineddata` file, not the `.gz` compressed version.
+1. Download: https://github.com/tesseract-ocr/tessdata_fast/raw/main/eng.traineddata
+2. Place file in: `{device}/cache/tesseract/eng.traineddata`
+3. This requires manual file placement on the device before first use
 
-## Why This is Needed
-The app is designed to work completely offline. By bundling the language data
-with the app, Tesseract.js doesn't need to download files from a CDN at runtime.
-The language file will be cached on the device after first use for optimal performance.
+## Why This Approach?
 
-## File Size
-- eng.traineddata: ~4.9 MB (tessdata_fast version)
-- Alternative: eng.traineddata from tessdata_best (~11 MB, more accurate but slower)
+Expo/React Native apps cannot easily bundle large binary assets (like 5MB .traineddata files) 
+in a way that Tesseract.js can access at runtime. The caching approach ensures:
 
-Choose based on your accuracy vs speed requirements.
+- ✅ Offline operation after first use
+- ✅ Smaller APK size
+- ✅ Automatic updates if language data changes
+- ✅ No complex asset loading code
+
+## File Details
+- File: `eng.traineddata` (uncompressed)
+- Size: ~4.9 MB (tessdata_fast)
+- Language: English
+- Source: https://github.com/tesseract-ocr/tessdata_fast
+
+## For Truly Offline Environments
+
+If deploying to devices that will NEVER have internet:
+1. Build and install the app on a device with internet
+2. Run OCR once to cache the language data
+3. The app will then work offline indefinitely
+4. OR manually place eng.traineddata in the cache directory via USB/ADB

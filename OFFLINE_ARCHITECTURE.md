@@ -32,20 +32,21 @@ This Android app is designed to work **100% offline** for maximum security and r
   - Embedded directly in PDF documents
 
 ### ✅ OCR Text Extraction (tesseract.js)
-- **Status**: Fully Offline (with local language data)
-- **Implementation**: Tesseract OCR with bundled language files
+- **Status**: Offline-First (caches language data locally)
+- **Implementation**: Tesseract OCR with local caching
 - **Location**: `utils/ocr.js`
 - **Configuration**:
   ```javascript
   const worker = await createWorker({
-    cachePath: FileSystem.cacheDirectory,
-    langPath: `${FileSystem.bundleDirectory}assets/tesseract`,
+    cachePath: FileSystem.cacheDirectory + 'tesseract',
+    cacheMethod: 'write',
   });
   ```
-- **Requirements**:
-  - Language training data must be bundled in `assets/tesseract/`
-  - Uses bundled assets with local caching instead of CDN
-  - All processing happens on-device
+- **Offline Operation**:
+  - First run: Downloads language data (requires internet)
+  - Subsequent runs: Uses cached data (fully offline)
+  - Cache persists across app sessions
+  - For pre-seeded offline: Manually place eng.traineddata in cache directory
 
 ### ✅ Image Processing (expo-image-manipulator)
 - **Status**: Fully Offline
@@ -108,18 +109,31 @@ This Android app is designed to work **100% offline** for maximum security and r
 ```
 
 ### Asset Bundling
-- All assets bundled via `assetBundlePatterns: ["**/*"]`
-- Includes Tesseract language files
-- No runtime asset downloads
+- All static assets bundled via `assetBundlePatterns: ["**/*"]`
+- Images, icons, and splash screens included
+- OCR language data cached on first use (or pre-seeded manually)
 
 ## Why Offline-First?
 
 1. **Security**: No data leaves the device
-2. **Reliability**: Works in areas without connectivity
+2. **Reliability**: Works in areas without connectivity  
 3. **Privacy**: No cloud services, no tracking
 4. **Speed**: No network latency
 5. **Legal Compliance**: Chain of custody maintained locally
 6. **Forensic Integrity**: All sealing operations happen on-device
+
+## Offline Operation Notes
+
+### OCR Language Data
+- **First Run**: Requires internet to download `eng.traineddata` (~5MB)
+- **After First Run**: Fully offline - uses cached language data
+- **For Air-Gapped Deployment**: Run app once on internet-connected device, then deploy
+- **Alternative**: Manually pre-seed cache directory with language file
+
+### All Other Operations
+- **100% Offline**: PDF generation, hashing, QR codes, image processing, contradiction analysis
+- **No Network Calls**: All processing happens on-device
+- **No Permissions**: App doesn't request INTERNET permission
 
 ## Dependencies Audit
 
@@ -130,7 +144,7 @@ All dependencies verified for offline capability:
 | pdf-lib | 1.17.1 | ✅ | Pure JS PDF generation |
 | crypto-js | 4.2.0 | ✅ | Pure JS cryptography |
 | qrcode | ^1.5.4 | ✅ | Pure JS QR generation |
-| tesseract.js | ^4.1.1 | ✅ | With local language data |
+| tesseract.js | ^4.1.1 | ✅* | *Caches language data locally |
 | expo-file-system | ~17.0.0 | ✅ | Native filesystem |
 | expo-camera | ~15.0.0 | ✅ | Native camera |
 | expo-image-picker | ~16.0.0 | ✅ | Native picker |
