@@ -24,12 +24,12 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Authenticate with Expo
+      - name: Set Expo Token
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas whoami --token "$EXPO_TOKEN"
+        run: echo "EXPO_TOKEN set"
 
       - name: Publish update to Expo
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas update --auto --non-interactive --token "$EXPO_TOKEN"
+        run: eas update --auto --non-interactive
