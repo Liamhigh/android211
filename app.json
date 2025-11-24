@@ -2,31 +2,9 @@
   "expo": {
     "name": "VerumContradictionEngine",
     "slug": "verum-contradiction-engine",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/logo.png",
-    "userInterfaceStyle": "dark",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "plugins": [],
+    "platforms": ["android"],
     "android": {
-      "package": "com.verum.contradiction",
-      "permissions": [
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE",
-        "CAMERA"
-      ],
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
-        "backgroundColor": "#0A1524"
-      }
-    },
-    "extra": {
-      "eas": {
-        "projectId": "98593585-ea3b-4505-ac7f-829fb1fc13e1"
-      }
-    },
-    "owner": "liamhigh"
+      "package": "com.verum.contradictionengine"
+    }
   }
 }
