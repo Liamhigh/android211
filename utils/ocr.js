@@ -17,7 +17,8 @@ export async function runOCR(uri) {
     const worker = await createWorker({
       logger: m => console.log("TESSERACT:", m),
       // Store language data in app's cache directory for offline reuse
-      cachePath: FileSystem.cacheDirectory + 'tesseract',
+      // Ensure proper path formatting with trailing slash
+      cachePath: `${FileSystem.cacheDirectory}tesseract/`,
       // Use cached data when available, avoiding CDN calls
       cacheMethod: 'write',
     });

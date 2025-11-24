@@ -91,7 +91,7 @@ This Android app is designed to work **100% offline** for maximum security and r
 ]
 ```
 
-**Note**: No internet permission (`INTERNET`) is required or requested.
+**Note**: No explicit INTERNET permission is declared in the manifest. However, Android apps have network access by default. The app uses the network only once - to download OCR language data (~5MB) on first use. After caching, all operations are offline.
 
 ## Build Configuration
 
@@ -124,16 +124,20 @@ This Android app is designed to work **100% offline** for maximum security and r
 
 ## Offline Operation Notes
 
-### OCR Language Data
-- **First Run**: Requires internet to download `eng.traineddata` (~5MB)
-- **After First Run**: Fully offline - uses cached language data
-- **For Air-Gapped Deployment**: Run app once on internet-connected device, then deploy
-- **Alternative**: Manually pre-seed cache directory with language file
+### OCR Language Data - One-Time Setup
+- **First OCR Use**: Requires internet to download `eng.traineddata` (~5MB) from CDN
+- **After First Use**: Fully offline - uses cached language data indefinitely
+- **For Air-Gapped Deployment**: 
+  - Option 1: Run app once on internet-connected device, then use adb backup/restore
+  - Option 2: Deploy to devices with temporary internet, run OCR once per device
+  - Option 3: Custom build process to pre-bundle cached data
+- **Cache Location**: `{app_cache_directory}/tesseract/eng.traineddata`
 
-### All Other Operations
+### All Other Operations - Always Offline
 - **100% Offline**: PDF generation, hashing, QR codes, image processing, contradiction analysis
-- **No Network Calls**: All processing happens on-device
-- **No Permissions**: App doesn't request INTERNET permission
+- **No Network Calls**: All processing happens on-device (except initial OCR language download)
+- **Privacy**: No analytics, tracking, or cloud services
+- **Security**: Chain of custody maintained entirely on device
 
 ## Dependencies Audit
 
