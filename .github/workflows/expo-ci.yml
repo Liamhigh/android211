@@ -25,11 +25,11 @@ jobs:
         run: |
           npm install --legacy-peer-deps
 
-      - name: Login to Expo
+      - name: Authenticate with Expo
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: |
-          eas login --token "$EXPO_TOKEN"
+          eas whoami --token "$EXPO_TOKEN"
 
       - name: Publish update to Expo
         run: |
