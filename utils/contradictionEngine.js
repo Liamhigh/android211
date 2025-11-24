@@ -10,10 +10,13 @@ function extractSentences(text) {
 
 // Utility: Extract potential timestamps/dates
 function extractTimes(sentences) {
-  const timeRegex = /\b(\d{1,2}:\d{2}(?:am|pm)?)|\b(\d{4}|\d{2})-(\d{1,2})-(\d{1,2})\b/g;
+  // Separate regex patterns for better readability and maintainability
+  const timePattern = /\b\d{1,2}:\d{2}(?:am|pm)?\b/gi;
+  const datePattern = /\b(?:\d{4}|\d{2})-\d{1,2}-\d{1,2}\b/g;
+  
   let found = [];
   sentences.forEach((s, i) => {
-    const times = [...s.matchAll(timeRegex)];
+    const times = [...s.matchAll(timePattern), ...s.matchAll(datePattern)];
     if (times.length) found.push({ index: i, sentence: s, times });
   });
   return found;

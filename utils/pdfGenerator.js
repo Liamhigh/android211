@@ -56,15 +56,42 @@ export async function generatePDF(text, results) {
   } else {
     for (let c of results.contradictions) {
       if (y < 150) break; // stop overflow
-      const wrappedText = c.substring(0, 80); // Simple text wrap
-      page.drawText("• " + wrappedText, {
-        x: 40,
-        y,
-        size: 10,
-        font,
-        color: rgb(1, 1, 1),
-      });
-      y -= 20;
+      
+      // Wrap text at word boundaries
+      const maxWidth = 75; // characters per line
+      let words = c.split(' ');
+      let currentLine = '';
+      
+      for (let word of words) {
+        if ((currentLine + word).length > maxWidth && currentLine.length > 0) {
+          page.drawText("• " + currentLine.trim(), {
+            x: 40,
+            y,
+            size: 10,
+            font,
+            color: rgb(1, 1, 1),
+          });
+          y -= 15;
+          currentLine = word + ' ';
+          if (y < 150) break;
+        } else {
+          currentLine += word + ' ';
+        }
+      }
+      
+      // Draw remaining text
+      if (currentLine.trim().length > 0 && y >= 150) {
+        const prefix = currentLine === c ? "• " : "  ";
+        page.drawText(prefix + currentLine.trim(), {
+          x: 40,
+          y,
+          size: 10,
+          font,
+          color: rgb(1, 1, 1),
+        });
+      }
+      
+      y -= 20; // Extra space between contradictions
     }
   }
 
@@ -116,9 +143,14 @@ export async function generatePDF(text, results) {
   const pdfBytes = await pdf.save();
   const fileUri = FileSystem.documentDirectory + "VerumContradictionReport.pdf";
   
+  // Convert Uint8Array to base64 string without using Buffer
+  const base64 = btoa(
+    pdfBytes.reduce((data, byte) => data + String.fromCharCode(byte), '')
+  );
+  
   await FileSystem.writeAsStringAsync(
     fileUri, 
-    Buffer.from(pdfBytes).toString('base64'),
+    base64,
     { encoding: FileSystem.EncodingType.Base64 }
   );
 
